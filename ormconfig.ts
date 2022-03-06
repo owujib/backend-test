@@ -44,10 +44,4 @@ const ORMConfig =
     ? dbConfig.production
     : dbConfig.development;
 
-console.log({
-  entities: [`${__dirname}/entity/**/*.ts`],
-  migrations: [`${__dirname}/migration/**/*.ts`],
-  subscribers: [`${__dirname}/subscriber/**/*.ts`],
-});
-
 module.exports = ORMConfig;

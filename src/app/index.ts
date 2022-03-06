@@ -14,26 +14,33 @@ import ApiRoutes from '../routes/api';
 const dbConfig = require('../ormconfig');
 
 class Kernel {
+  server: Express.Application;
+
+  constructor() {
+    this.server = Express();
+    this.express();
+    this.database();
+    this.Main();
+  }
+
   /**
    * @description app initializer
    */
-  static express() {
-    const app = Express();
+  private express() {
+    this.server.use(Express.json());
+    this.server.use(Express.urlencoded({ extended: true }));
+    this.server.use(cors());
+    this.server.set('view engine', 'ejs');
+    this.server.set('views', path.join(__dirname, '../views'));
+    this.server.use(Express.static(path.join(__dirname, '../public')));
 
-    app.use(Express.json());
-    app.use(Express.urlencoded({ extended: true }));
-    app.use(cors());
-    app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, '../views'));
-    app.use(Express.static(path.join(__dirname, '../public')));
-
-    return app;
+    return this.server;
   }
 
   /**
    * @description server database initializaer
    */
-  static database() {
+  private database() {
     const connection: ConnectionOptions = dbConfig;
 
     return createConnection(connection).then(async (conn) => {
@@ -45,23 +52,11 @@ class Kernel {
   /**
    * @description server initializer function
    */
-  public server() {
-    const Server = Kernel.express();
-
-    /** connect to database */
-    Kernel.database();
-
-    Server.use('/api', ApiRoutes);
-    Server.use('/', WebRoutes);
-    Server.use(GlobalErrorHandler);
-
-    return {
-      server: Server,
-      appUrl: process.env.APP_URL,
-      appName: process.env.APP_NAME,
-      port: process.env.PORT,
-    };
+  public Main() {
+    this.server.use('/api', ApiRoutes);
+    this.server.use('/', WebRoutes);
+    this.server.use(GlobalErrorHandler);
   }
 }
 
-export default new Kernel();
+export default new Kernel().server;

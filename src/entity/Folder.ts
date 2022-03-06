@@ -25,6 +25,12 @@ export class Folder extends BaseEntity {
     })
       name: string;
 
+    @Column({
+      type: 'varchar',
+      nullable: false,
+    })
+      eTag: string;
+
     @ManyToOne(() => User, (user) => user.folders)
     @JoinColumn()
       user: User;

@@ -1,3 +1,5 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(`${__dirname}../.env`) });
 /* eslint-disable operator-linebreak */
 const dbConfig = {
   development: {
@@ -37,17 +39,34 @@ const dbConfig = {
       subscribersDir: 'subscriber',
     },
   },
+  test: {
+    type: process.env.DB_TYPE,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    synchronize: false,
+    logging: false,
+    entities: [`${__dirname}/entity/**/*.ts`],
+    migrations: [`${__dirname}/migration/**/*.ts`],
+    subscribers: [`${__dirname}/subscriber/**/*.ts`],
+    cli: {
+      entitiesDir: 'entity',
+      migrationsDir: 'migration',
+      subscribersDir: 'subscriber',
+    },
+  },
 };
 
-const ORMConfig =
-  process.env.NODE_ENV === 'production'
-    ? dbConfig.production
-    : dbConfig.development;
+let ORMConfig;
 
-console.log({
-  entities: [`${__dirname}/entity/**/*.ts`],
-  migrations: [`${__dirname}/migration/**/*.ts`],
-  subscribers: [`${__dirname}/subscriber/**/*.ts`],
-});
+if (process.env.NODE_ENV === 'production') {
+  ORMConfig = dbConfig.production;
+} else if (process.env.NODE_ENV === 'development') {
+  ORMConfig = dbConfig.development;
+} else {
+  ORMConfig = dbConfig.test;
+}
 
 module.exports = ORMConfig;

@@ -30,6 +30,14 @@ const sendErrorDev = (err: ApiError, req: Request, res: Response) : Response => 
   });
 };
 
+function handleJWTExpiredError() {
+  return new ApiError(
+    'Your token has expired! Please log in again.',
+    403,
+    { error: null },
+  );
+}
+
 /**
  * @param err Api Exception hanlder
  * @param req server request object
@@ -71,9 +79,9 @@ const GlobalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
   if (process.env.NODE_ENV === 'development') sendErrorDev(err, req, res);
 
   if (process.env.NODE_ENV === 'production') {
-    const error = { ...err };
+    let error = { ...err };
     error.message = err.message;
-
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     return sendErrorProd(error, req, res);
   }
 };

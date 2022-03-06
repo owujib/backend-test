@@ -21,12 +21,12 @@ export class File extends BaseEntity {
     @Column({
       nullable: false,
     })
-      fileUrl: string;
+      key: string;
 
     @Column({
       nullable: false,
     })
-      publicId: string;
+      bucketId: string;
 
     @Column({
       nullable: false,

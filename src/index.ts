@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
-import Kernel from './app';
+// import Server from './app';
+const { default: Server } = require('./app');
 
-const {
-  server, appName, appUrl, port,
-} = Kernel.server();
-
-server.listen(port || 5000, () => {
-  console.info(`${appName} is running on  ${appUrl} ${port} `);
+Server.listen(process.env.PORT || 5000, () => {
+  console.info(`${process.env.APP_NAME} is running on  ${process.env.APP_URL} ${process.env.PORT} `);
 });
+
+module.exports = Server;

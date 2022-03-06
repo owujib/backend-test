@@ -1,19 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import cloudinary from 'cloudinary';
-import AWS from 'aws-sdk';
 import { getRepository } from 'typeorm';
 import Helpers from '../helpers';
 import ApiError from '../utils/ApiError';
 import Upload from '../utils/Upload';
 import Controller from './Controller';
 import { File } from '../entity/File';
-
-const s3: any = new AWS.S3({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env
-});
-// s3.pu
+import { Folder } from '../entity/Folder';
 
 class UploadsController extends Controller {
   constructor() {
@@ -31,11 +25,12 @@ class UploadsController extends Controller {
             file: null,
           }));
         }
-        const newFile: any = await Helpers.cloudinaryImageUploadMethod(file.path);
+
+        const s3Data: any = await Helpers.uploadToS3(file);
 
         const myFile = new File();
-        myFile.fileUrl = newFile.file.secure_url;
-        myFile.publicId = newFile.file.public_id;
+        myFile.key = `/files/${s3Data.key}`;
+        myFile.bucketId = s3Data.Bucket;
         myFile.user = req.user.id;
         myFile.safe = true;
 
@@ -48,10 +43,21 @@ class UploadsController extends Controller {
     });
   }
 
-  public async createFolder(req: Request, res: Response, next: NextFunction) {
+  public async createFolder(req: any, res: Response, next: NextFunction) {
     try {
-      // const folder: any = await Helpers.cloudinaryFolderMethod('favour');
-      return super.sendSuccessResponse(res, {}, 'Folder created', 201);
+      if (!req.body.folderName) {
+        return next(new ApiError('Request Validation Error', 400, { message: 'folderName  can not be empty' }));
+      }
+
+      const folder: any = await Helpers.createFolderObject(req.body.folderName);
+      console.log(folder);
+      const myFolder = new Folder();
+      myFolder.name = req.body.folderName;
+      myFolder.eTag = folder.ETag;
+      myFolder.user = req.user.id;
+      await myFolder.save();
+
+      return super.sendSuccessResponse(res, myFolder, 'Folder created', 201);
     } catch (error) {
       return next(error);
     }
@@ -80,13 +86,20 @@ class UploadsController extends Controller {
     }
   }
 
-  public async downloadFile(req:Request, res: Response, next: NextFunction) {
+  public async getAllFolders(req:any, res: Response, next: NextFunction) {
     try {
-      const fileRepository = getRepository(File);
-      const files: any = await fileRepository.findOne(req.params.id);
-      const download = fs.createReadStream(files.fileUrl);
+      const folderRepository = getRepository(Folder);
+      const folders: any = await folderRepository.find({ where: { user: req.user.id } });
+      return super.sendSuccessResponse(res, folders, 'All folders fetched', 200);
+    } catch (error) {
+      return next(error);
+    }
+  }
 
-      // return download.pipe(res);
+  public downloadFile(req:Request, res: Response, next: NextFunction) {
+    try {
+      const fileStream = Helpers.getFileStream(req.params.key);
+      return fileStream.pipe(res);
     } catch (error) {
       return next(error);
     }

@@ -1,35 +1,72 @@
-const request = require('supertest');
-const app = require('../build/src/app');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const request = require('request');
+const server = require('../build/src/app').default;
 
-beforeAll(() => {
-  console.log('he');
-});
+chai.should();
+chai.use(chaiHttp);
+describe('Auth Api', () => {
+  describe('base route for api', () => {
+    it('it should get api base route', (done) => {
+      chai
+        .request(server)
+        .get('/api')
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.body.should.have.a('object');
+          response.body.should.have.property('message');
+          response.body.should.have
+            .property('message')
+            .eq('Welcome to my world. Hello World');
+          done();
+        });
+    });
+  });
 
-describe('Todos API', () => {
-  it('POST /api/register ---> Creates a new user', () =>
-    request(app)
-      .post('/api/register')
-      .send({
-        email: 'test@email.com',
-        fullname: 'test user',
-        password: 'password',
-      })
-      .expect('Content-Type', /json/)
-      .expect(201)
-      .then((response) => {
-        expect(response.body).toEqual(
-          expect.objectContaining({
-            name: 'do the dishes',
-            completed: false,
-            id: expect.any(Number),
+  describe('auth actions', () => {
+    it('it should post to register route', () => {
+      chai
+        .request(server)
+        .post('/api/register')
+        .send({
+          fullname: 'test',
+          email: 'tester@emai.com',
+          password: 'password',
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.have.a('object');
+          response.body.should.have.property('status');
+          response.body.should.have.property('message');
+          response.body.should.have.property('data');
+          response.body.should.have.property('status').eq('success');
+          response.body.should.have
+            .property('message')
+            .eq('User Registration Successfull');
+          response.body.should.have.property('data').to.eql(Object);
+          done();
+        });
+    });
 
-            data: {
-              email: 'test@email.com',
-              fullname: 'test user',
-              password: expect.any(String),
-              avatar: expect.any(String),
-            },
-          }),
-        );
-      }));
+    it('it should post to login route', () => {
+      chai
+        .request(server)
+        .post('/api/register')
+        .send({
+          email: 'tester@emai.com',
+          password: 'password',
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.have.a('object');
+          response.body.should.have.property('status');
+          response.body.should.have.property('token');
+          response.body.should.have.property('data');
+          response.body.should.have.property('status').eq('success');
+          response.body.should.have.property('token').to.eql(String);
+          response.body.should.have.property('data').to.eql(Object);
+          done();
+        });
+    });
+  });
 });
