@@ -1,4 +1,5 @@
 const path = require('path');
+
 /* eslint-disable operator-linebreak */
 const dbConfig = {
   development: {
@@ -29,9 +30,9 @@ const dbConfig = {
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: ['src/entity/**/*.ts'],
-    migrations: ['src/migration/**/*.ts'],
-    subscribers: ['src/subscriber/**/*.ts'],
+    entities: ['build/src/entity/**/*.ts'],
+    migrations: ['build/src/migration/**/*.ts'],
+    subscribers: ['build/src/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'entity',
       migrationsDir: 'migration',
