@@ -1,3 +1,4 @@
+const path = require('path');
 /* eslint-disable operator-linebreak */
 const dbConfig = {
   development: {
@@ -37,11 +38,34 @@ const dbConfig = {
       subscribersDir: 'subscriber',
     },
   },
+  test: {
+    type: process.env.DB_TYPE,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    synchronize: false,
+    logging: false,
+    entities: ['src/entity/**/*.ts'],
+    migrations: ['src/migration/**/*.ts'],
+    subscribers: ['src/subscriber/**/*.ts'],
+    cli: {
+      entitiesDir: 'entity',
+      migrationsDir: 'migration',
+      subscribersDir: 'subscriber',
+    },
+  },
 };
 
-const ORMConfig =
-  process.env.NODE_ENV === 'production'
-    ? dbConfig.production
-    : dbConfig.development;
+let ORMConfig;
+
+if (process.env.NODE_ENV === 'production') {
+  ORMConfig = dbConfig.production;
+} else if (process.env.NODE_ENV === 'development') {
+  ORMConfig = dbConfig.development;
+} else {
+  ORMConfig = dbConfig.test;
+}
 
 module.exports = ORMConfig;

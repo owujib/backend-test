@@ -11,7 +11,7 @@ import GlobalErrorHandler from '../helpers/GlobalErrorHandler';
 import WebRoutes from '../routes/web';
 import ApiRoutes from '../routes/api';
 
-const dbConfig = require('../ormconfig');
+const dbConfig = require('../../ormconfig');
 
 class Kernel {
   server: Express.Application;
@@ -42,7 +42,7 @@ class Kernel {
    */
   private database() {
     const connection: ConnectionOptions = dbConfig;
-
+    console.log(connection);
     return createConnection(connection).then(async (conn) => {
       await conn.runMigrations();
       console.log('database connection is successful');
