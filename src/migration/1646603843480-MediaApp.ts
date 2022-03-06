@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class MediaApp1646573735826 implements MigrationInterface {
-    name = 'MediaApp1646573735826'
+export class MediaApp1646603843480 implements MigrationInterface {
+    name = 'MediaApp1646603843480'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "fullname" character varying NOT NULL, "email" character varying NOT NULL, "avatar" character varying DEFAULT 'https://res.cloudinary.com/owujib/image/upload/v1640215435/Group_2_by14sn.svg', "password" character varying NOT NULL, "role" integer NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);

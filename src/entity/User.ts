@@ -21,7 +21,6 @@ export class User extends BaseEntity {
       id: number;
 
     @Column({
-
       nullable: false,
     })
       fullname: string;
@@ -32,7 +31,6 @@ export class User extends BaseEntity {
       email: string;
 
     @Column({
-      type: 'varchar',
       nullable: true,
       default: 'https://res.cloudinary.com/owujib/image/upload/v1640215435/Group_2_by14sn.svg',
     })
