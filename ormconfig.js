@@ -30,9 +30,9 @@ const dbConfig = {
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: ['build/src/entity/**/*.ts'],
-    migrations: ['build/src/migration/**/*.ts'],
-    subscribers: ['build/src/subscriber/**/*.ts'],
+    entities: ['./build/src/entity/**/*.ts'],
+    migrations: ['./build/src/migration/**/*.ts'],
+    subscribers: ['./build/src/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'entity',
       migrationsDir: 'migration',
