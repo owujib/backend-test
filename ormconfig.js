@@ -32,9 +32,9 @@ const dbConfig = {
     entities: ['./build/src/entity/**/*.js'],
     migrations: ['./build/src/migration/**/*.js'],
     subscribers: ['./build/src/subscriber/**/*.js'],
-    // entities: ['./build/src/entity/**/*.ts'],
-    // migrations: ['./build/src/migration/**/*.ts'],
-    // subscribers: ['./build/src/subscriber/**/*.ts'],
+    // entities: ['src/entity/**/*.ts'],
+    // migrations: ['src/migration/**/*.ts'],
+    // subscribers: ['rc/subscriber/**/*.ts'],
     cli: {
       entitiesDir: 'entity',
       migrationsDir: 'migration',
