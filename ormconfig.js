@@ -1,8 +1,4 @@
 const path = require('path');
-const { default: User } = require('./src/entity/User');
-const { default: File } = require('./src/entity/File');
-const { default: Folder } = require('./src/entity/Folder');
-
 /* eslint-disable operator-linebreak */
 const dbConfig = {
   development: {
@@ -33,9 +29,9 @@ const dbConfig = {
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: [User, File, Folder],
-    migrations: ['./build/src/migration/**/*.ts'],
-    subscribers: ['./build/src/subscriber/**/*.ts'],
+    entities: ['./build/src/entity/**/*.js'],
+    migrations: ['./build/src/migration/**/*.js'],
+    subscribers: ['./build/src/subscriber/**/*.js'],
     // entities: ['./build/src/entity/**/*.ts'],
     // migrations: ['./build/src/migration/**/*.ts'],
     // subscribers: ['./build/src/subscriber/**/*.ts'],
