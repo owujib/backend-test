@@ -40,6 +40,7 @@ AWS_BUCKET_NAME=<bucket_name>
 ```
 
 after copying the env file you can `docker-compose up`
+to run migration file type `npm run typeorm migration:run` in your terminal
 
 
 
