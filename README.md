@@ -14,7 +14,7 @@ DB_HOST=0.0.0.0
 DB_PORT=5422
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
-DB_NAME=media
+DB_NAME=mediaapp
 
 DB_TEST_TYPE=postgres
 DB_TEST_HOST=0.0.0.0
