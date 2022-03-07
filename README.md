@@ -1,3 +1,49 @@
+# A simple documentation
+clone the repo and run npm install
+
+copy env config and please be sure to use `npm run build` if you wan to work in production mode locally
+```markdown   
+
+NODE_ENV='production'
+PORT=5500
+APP_NAME='Media Application'
+APP_URL=http://localhost
+
+DB_TYPE=postgres
+DB_HOST=0.0.0.0
+DB_PORT=5422
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=media
+
+DB_TEST_TYPE=postgres
+DB_TEST_HOST=0.0.0.0
+DB_TEST_PORT=5422
+DB_TEST_USERNAME=postgres
+DB_TEST_PASSWORD=postgres
+DB_TEST_NAME=mediatest
+
+JWT_SECRET=bddb234e9058e8063627
+JWT_EXPIRES_IN=1d
+
+CLOUDINARY_API_KEY=<KEY>
+CLOUDINARY_CLOUD_NAME=<Cloud_name>
+CLOUDINARY_API_SECRET=<secret>
+
+
+
+AWS_BUCKET_REGION=<Region>
+AWS_SECRET_ACCESS_KEY=<key>
+AWS_ACCESS_KEY_ID=<key_ud>
+AWS_BUCKET_NAME=<bucket_name>
+
+```
+
+after copying the env file you can `docker-compose up`
+
+
+
+
 # Backend Engineer Test
 
 Create an API that serves as an cloud backup system
